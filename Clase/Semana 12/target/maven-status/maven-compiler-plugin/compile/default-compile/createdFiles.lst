@@ -1,0 +1,9 @@
+com\tiendaweb\bean\ProductoBean.class
+com\tiendaweb\dao\CategoriaDAOImpl.class
+com\tiendaweb\dao\ProductoDAO.class
+com\tiendaweb\util\DBConnection.class
+com\tiendaweb\model\Categoria.class
+com\tiendaweb\dao\CategoriaDAO.class
+com\tiendaweb\model\Producto.class
+com\tiendaweb\bean\CategoriaBean.class
+com\tiendaweb\dao\ProductoDAOImpl.class

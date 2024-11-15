@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head> 
+    </h:head>
+    <h:body>
+        <p:growl id="gMessage" showDetail="true">            
+        </p:growl>
+        <p:panel header="Gestion de Categorias">
+            <h:form id="categoriaForm">
+                <p:messages id="messages" showDetail="true" 
+                            closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+
+                <p:panelGrid layout="grid" columns="2">
+                    <p:outputLabel for="nombre" value="Nombre:"></p:outputLabel>
+                    <p:inputText id="nombre" 
+                                 value="#{categoriaBean.selectedCategoria.nombre}"
+                                 required="true">
+                    </p:inputText>
+                    <p:commandButton value="Grabar" 
+                                     action="#{categoriaBean.saveCategoria}"
+                                     update="categoriaTable"
+                                     >
+
+                    </p:commandButton>
+                </p:panelGrid>
+            </h:form>
+            <p:dataTable id="categoriaTable" 
+                         value="#{categoriaBean.categorias}"
+                         var="cat"
+                         paginator="true" rows="6" paginatorPosition="bottom"
+                         >
+                <p:column headerText="Codigo">
+                    <h:outputText value="#{cat.id}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{cat.nombre}" />
+                </p:column>
+            </p:dataTable>
+        
+        
+        
+        </p:panel>
+
+    </h:body>
+
+</html>    

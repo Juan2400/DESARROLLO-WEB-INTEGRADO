@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head> 
+    </h:head>
+    <h:body>
+        <p:growl id="globalMessages" 
+                 showDetail="true">            
+        </p:growl>
+        <p:panel header="Gestion de Categorias">
+            <h:form id="categoriaForm">
+                <p:dataTable id="categoriaTable" 
+                             value="#{categoriaBean.categorias}"
+                             var="cat"
+                             paginator="true" rows="6" paginatorPosition="bottom"
+                             rowKey="#{cat.id}"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                             rowsPerPageTemplate="5,10,15,{ShowAll|'Todos'}"
+                             selection="#{categoriaBean.selectedCategoria}"    
+                             selectionMode="single"
+                             >
+                    <f:facet name="header">
+                        <p:commandButton value="Nueva Categoría" 
+                                         icon="pi pi-plus" 
+                                         actionListener="#{categoriaBean.prepareNewCategoria}"
+                                         oncomplete="PF('categoryDialog').show()" 
+                                         update=":categoryDialogForm:categoryDetail"
+                                         >
+
+                        </p:commandButton>
+
+                    </f:facet>
+
+
+                    <p:column headerText="Codigo">
+                        <h:outputText value="#{cat.id}" />
+                    </p:column>
+                    <p:column headerText="Nombre" 
+                              sortBy="#{cat.nombre}"
+                              filterBy="#{cat.nombre}" 
+                              filterMatchMode="contains">          
+
+                        <h:outputText value="#{cat.nombre}" />
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" update=":categoryDialogForm:categoryDetail" 
+                                         oncomplete="PF('categoryDialog').show()" 
+                                         title="Editar" styleClass="ui-button-warning" style="margin-right: 5px;">
+                            <f:setPropertyActionListener value="#{cat}" target="#{categoriaBean.selectedCategoria}" />
+                        </p:commandButton>
+                        <p:commandButton icon="pi pi-trash" actionListener="#{categoriaBean.deleteCategoria(cat)}" 
+                                         update=":categoriaForm:categoriaTable :globalMessages" title="Eliminar" styleClass="ui-button-danger">
+                            <p:confirm header="Confirmación" message="¿Está seguro de eliminar esta categoría?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+
+
+
+                </p:dataTable>
+
+
+            </h:form>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
+            </p:confirmDialog>
+
+            <h:form id="categoryDialogForm">
+                <p:dialog header="Detalles de Categoría"
+                          modal="true" 
+                          widgetVar="categoryDialog"
+                          showEffect="fade" hideEffect="fade" resizable="false"
+                          >
+                    <p:outputPanel id="categoryDetail">
+                        <p:panelGrid layout="grid" columns="2">
+                            <p:outputLabel for="nombre" value="Nombre:"></p:outputLabel>
+                            <p:inputText id="nombre" 
+                                         value="#{categoriaBean.selectedCategoria.nombre}"
+                                         required="true">
+                            </p:inputText>
+                            <p:commandButton value="Grabar" 
+                                             action="#{categoriaBean.saveCategoria}"  
+                                             update="globalMessages"
+                                             oncomplete="PF('categoryDialog').hide()" 
+                                             >
+
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </p:outputPanel>
+
+                </p:dialog>
+            </h:form>
+
+        </p:panel>
+    </h:body>
+</html>    

@@ -1,0 +1,12 @@
+com\utp\modelo\ProductoDAOImpl.class
+com\utp\webmvc\resources\JakartaEE10Resource.class
+com\utp\modelo\ProductoDAO.class
+com\utp\modelo\CategoriaProductoDAOImpl.class
+com\utp\controlador\CategoriaController.class
+com\utp\modelo\Producto.class
+com\utp\util\ConexionBD.class
+com\utp\controlador\IndexController.class
+com\utp\controlador\ProductoController.class
+com\utp\modelo\CategoriaProductoDAO.class
+com\utp\webmvc\JakartaRestConfiguration.class
+com\utp\modelo\CategoriaProducto.class
