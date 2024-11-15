@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="4.0"
+              xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd">
+    
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>gMatriculas</from-outcome>
+            <to-view-id>/gestionMatriculas.xhtml</to-view-id>            
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>gCursos</from-outcome>
+            <to-view-id>/gestionCursos.xhtml</to-view-id>            
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>gCursosDocentes</from-outcome>
+            <to-view-id>/gestionCursosDocentes.xhtml</to-view-id>            
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>gAlumnos</from-outcome>
+            <to-view-id>/gestionAlumnos.xhtml</to-view-id>            
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>gDocentes</from-outcome>
+            <to-view-id>/gestionDocentes.xhtml</to-view-id>            
+        </navigation-case>
+        
+    </navigation-rule>
+    
+</faces-config>

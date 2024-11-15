@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+            .column-center {
+                text-align: center;
+            }
+            .column-right {
+                text-align: right;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <p:growl id="globalMessages" showDetail="true" />
+
+        <p:panel header="Gestión de Alumnos">
+            <h:form id="alumnoForm">
+                <p:dataTable id="alumnoTable" 
+                             value="#{alumnoBean.alumnos}"
+                             var="al"
+                             paginator="true" rows="6" paginatorPosition="bottom"
+                             rowKey="#{al.idAlumno}"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                             rowsPerPageTemplate="5,10,15,{ShowAll|'Todos'}"
+                             selection="#{alumnoBean.selectedAlumno}"    
+                             selectionMode="single">
+                    <f:facet name="header">
+                        <p:commandButton value="Nuevo Alumno" 
+                                         icon="pi pi-plus" 
+                                         actionListener="#{alumnoBean.prepareNewAlumno}"
+                                         oncomplete="PF('alumnoDialog').show()" 
+                                         update=":alumnoDialogForm:alumnoDetail" />
+                    </f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{al.idAlumno}" />
+                    </p:column>
+                    <p:column headerText="Nombre" sortBy="#{al.nombre}" filterBy="#{al.nombre}" filterMatchMode="startsWith">
+                        <h:outputText value="#{al.nombre}" />
+                    </p:column>
+                    <p:column headerText="Apellido" sortBy="#{al.apellido}" filterBy="#{al.apellido}" filterMatchMode="startsWith">
+                        <h:outputText value="#{al.apellido}" />
+                    </p:column>
+                    <p:column headerText="DNI" sortBy="#{al.dni}" filterBy="#{al.dni}" filterMatchMode="startsWith">
+                        <h:outputText value="#{al.dni}" />
+                    </p:column>
+
+                    <p:column headerText="Télfono Apoderado">
+                        <h:outputText value="#{al.telefonoApoderado}" />
+                    </p:column>
+                    <p:column headerText="Dirección">
+                        <h:outputText value="#{al.direccion}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{al.email}" />
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" update=":alumnoDialogForm:alumnoDetail" 
+                                         oncomplete="PF('alumnoDialog').show()" 
+                                         title="Editar" styleClass="ui-button-warning" style="margin-right: 5px;">
+                            <f:setPropertyActionListener value="#{al}" target="#{alumnoBean.selectedAlumno}" />
+                        </p:commandButton>
+                        <p:commandButton icon="pi pi-trash" actionListener="#{alumnoBean.deleteAlumno(al)}" 
+                                         update=":alumnoForm:alumnoTable :globalMessages" title="Eliminar" styleClass="ui-button-danger">
+                            <p:confirm header="Confirmación" message="¿Está seguro de eliminar este alumno?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <h:form>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
+
+            <h:form id="alumnoDialogForm">
+                <p:dialog header="Detalles del Alumno"
+                          modal="true" 
+                          widgetVar="alumnoDialog"
+                          showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="alumnoDetail">
+                        <p:panelGrid layout="grid" columns="2">
+                            <p:outputLabel for="dni" value="DNI:" />
+                            <p:inputText id="dni" value="#{alumnoBean.selectedAlumno.dni}" required="true" />
+
+                            <p:outputLabel for="nombre" value="Nombre:" />
+                            <p:inputText id="nombre" value="#{alumnoBean.selectedAlumno.nombre}" required="true" />
+
+                            <p:outputLabel for="apellido" value="Apellido:" />
+                            <p:inputText id="apellido" value="#{alumnoBean.selectedAlumno.apellido}" required="true" />
+
+                            <p:outputLabel for="telefono" value="Teléfono Apoderado:" />
+                            <p:inputText id="telefono" value="#{alumnoBean.selectedAlumno.telefonoApoderado}" />
+
+                            <p:outputLabel for="email" value="Email:" />
+                            <p:inputText id="email" value="#{alumnoBean.selectedAlumno.email}" />
+
+                            <p:outputLabel for="direccion" value="Dirección:" />
+                            <p:inputText id="direccion" value="#{alumnoBean.selectedAlumno.direccion}" />
+
+                            <p:commandButton value="Guardar" 
+                                             action="#{alumnoBean.saveAlumno}"  
+                                             update=":globalMessages"
+                                             oncomplete="PF('alumnoDialog').hide()" />
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
