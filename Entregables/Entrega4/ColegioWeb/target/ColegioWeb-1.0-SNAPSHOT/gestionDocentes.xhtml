@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+            .column-center {
+                text-align: center;
+            }
+            .column-right {
+                text-align: right;
+            }
+        </style>
+    </h:head>
+   <h:body>
+        <p:growl id="globalMessages" showDetail="true" />
+
+        <p:panel header="Gestión de Docente">
+            <h:form id="docenteForm">
+                <p:dataTable id="docenteTable"
+                             value="#{docenteBean.docentes}"
+                             var="doc"
+                             paginator="true" rows="6" paginatorPosition="bottom"
+                             rowKey="#{doc.idDocente}"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                             rowsPerPageTemplate="2,4,6,{ShowAll|'Todos'}"
+                             selection="#{docenteBean.selectedDocente}"
+                             selectionMode="single">
+                    <f:facet name="header">
+                        <p:commandButton value="Nuevo Docente"
+                                         icon="pi pi-plus"
+                                         actionListener="#{docenteBean.prepareNewDocente}"
+                                         oncomplete="PF('docenteDialog').show()"
+                                         update=":docenteDialogForm:docenteDetail" />
+                    </f:facet>
+                    <p:column headerText="ID">
+                        <h:outputText value="#{doc.idDocente}" />
+                    </p:column>
+                    <p:column headerText="Especialidad" sortBy="#{doc.especialidad}" filterBy="#{doc.especialidad}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.especialidad}" />
+                    </p:column>
+                    <p:column headerText="DNI" sortBy="#{doc.dni}" filterBy="#{doc.dni}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.dni}" />
+                    </p:column>
+                    <p:column headerText="Nombre" sortBy="#{doc.nombre}" filterBy="#{doc.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.nombre}" />
+                    </p:column>
+                    <p:column headerText="Apellido" sortBy="#{doc.apellido}" filterBy="#{doc.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.apellido}" />
+                    </p:column>
+                    <p:column headerText="Telefono" sortBy="#{doc.telefono}" filterBy="#{doc.telefono}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.telefono}" />
+                    </p:column>
+                    <p:column headerText="Email" sortBy="#{doc.email}" filterBy="#{doc.email}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.email}" />
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" update=":docenteDialogForm:docenteDetail"
+                                         oncomplete="PF('docenteDialog').show()"
+                                         title="Editar" styleClass="ui-button-warning" style="margin-right: 5px;">
+                            <f:setPropertyActionListener value="#{doc}" target="#{docenteBean.selectedDocente}" />   
+                        </p:commandButton>
+                        <p:commandButton icon="pi pi-trash" actionListener="#{docenteBean.deleteDocente(doc)}"
+                                         update=":docenteForm:docenteTable :globalMessages" title="Eliminar" styleClass="ui-button-danger">
+                            <p:confirm header="Confirmación" message="¿Está seguro de eliminar este Docente?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            
+            <h:form>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
+            
+            <h:form id="docenteDialogForm">
+                <p:dialog header="Detalles del Docente"
+                          modal="true" 
+                          widgetVar="docenteDialog"
+                          showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="docenteDetail">
+                        <p:panelGrid layout="grid" columns="2">
+                            
+                            <p:outputLabel for="dni" value="DNI"></p:outputLabel>
+                            <p:inputText id="dni" 
+                                         value="#{docenteBean.selectedDocente.dni}"
+                                         required="true">
+                            </p:inputText>
+                            <p:outputLabel for="especialidad" value="Especialidad"></p:outputLabel>
+                            <p:inputText id="especialidad" 
+                                         value="#{docenteBean.selectedDocente.especialidad}"
+                                         required="true">
+                            </p:inputText>
+                            <p:outputLabel for="nombre" value="Nombre"></p:outputLabel>
+                            <p:inputText id="nombre" 
+                                         value="#{docenteBean.selectedDocente.nombre}"
+                                         required="true">
+                            </p:inputText>
+                            <p:outputLabel for="apellido" value="Apellido"></p:outputLabel>
+                            <p:inputText id="apellido" 
+                                         value="#{docenteBean.selectedDocente.apellido}"
+                                         required="true">
+                            </p:inputText>
+                            <p:outputLabel for="telefono" value="Telefono"></p:outputLabel>
+                            <p:inputText id="telefono" 
+                                         value="#{docenteBean.selectedDocente.telefono}"
+                                         required="true">
+                            </p:inputText>
+                            <p:outputLabel for="email" value="Email"></p:outputLabel>
+                            <p:inputText id="email" 
+                                         value="#{docenteBean.selectedDocente.email}"
+                                         required="true">
+                            </p:inputText>
+                            
+                            <p:commandButton value="Guardar" 
+                                             action="#{docenteBean.saveDocente}"  
+                                             update="globalMessages"
+                                             oncomplete="PF('docenteDialog').hide()" />
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+            .column-center {
+                text-align: center;
+            }
+            .column-right {
+                text-align: right;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <p:growl id="globalMessages" showDetail="true" />
+
+        <p:panel header="Asignación de cursos por docente">
+            <h:form id="cursoDocenteForm">
+                <p:dataTable id="cursoDocenteTable" 
+                             value="#{cursoDocenteBean.cursoDocentes}"
+                             var="cd"
+                             paginator="true" rows="5" paginatorPosition="bottom"
+                             rowKey="#{cd.idCursoDocente}"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                             rowsPerPageTemplate="5,10,15,{ShowAll|'Todos'}"
+                             selection="#{cursoDocenteBean.selectedCursoDocente}"    
+                             selectionMode="single">
+                    <f:facet name="header">
+                        <p:commandButton value="Asignar curso a docente" 
+                                         icon="pi pi-plus" 
+                                         actionListener="#{cursoDocenteBean.prepareNewCursoDocente}"
+                                         oncomplete="PF('cursoDocenteDialog').show()" 
+                                         update=":cursoDocenteDialogForm:cursoDocenteDetail" />
+                    </f:facet>
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{cd.idCursoDocente}" />
+                    </p:column>
+                    <p:column headerText="Curso" sortBy="#{cd.curso.nombreCurso}" filterBy="#{cd.curso.nombreCurso}" filterMatchMode="contains">
+                        <h:outputText value="#{cd.curso.nombreCurso}" />
+                    </p:column>
+                    <p:column headerText="Docente" sortBy="#{cd.docente.apellido}" filterBy="#{cd.docente.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{cd.docente.apellido} #{cd.docente.nombre}" />
+                    </p:column>
+                    <p:column headerText="Grado" sortBy="#{cd.grado.nombreGrado}" filterBy="#{cd.grado.nombreGrado}" filterMatchMode="contains">
+                        <h:outputText value="#{cd.grado.nombreGrado}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" update=":cursoDocenteDialogForm:cursoDocenteDetail" 
+                                         oncomplete="PF('cursoDocenteDialog').show()" 
+                                         title="Editar" styleClass="ui-button-warning" style="margin-right: 5px;">
+                            <f:setPropertyActionListener value="#{cd}" target="#{cursoDocenteBean.selectedCursoDocente}" />
+                        </p:commandButton>
+                        <p:commandButton icon="pi pi-trash" actionListener="#{cursoDocenteBean.deleteCursoDocente(cd)}" 
+                                         update=":cursoDocenteForm:cursoDocenteTable :globalMessages" title="Eliminar" styleClass="ui-button-danger">
+                            <p:confirm header="Confirmación" message="¿Está seguro de eliminar este CursoDocente?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+            <h:form>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:form>
+
+            <h:form id="cursoDocenteDialogForm">
+                <p:dialog header="Detalles del Curso-Docente-Grado"
+                          modal="true" 
+                          widgetVar="cursoDocenteDialog"
+                          showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="cursoDocenteDetail">
+                        <p:panelGrid layout="grid" columns="2">
+                            <p:outputLabel for="curso" value="Curso:" />
+                            <p:selectOneMenu id="curso" value="#{cursoDocenteBean.selectedCursoDocente.curso.idCurso}" required="true">
+                                <f:selectItem itemLabel="Seleccione un curso" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{cursoBean.cursos}" var="curso" itemLabel="#{curso.nombreCurso}" itemValue="#{curso.idCurso}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="docente" value="Docente:" />
+                            <p:selectOneMenu id="docente" value="#{cursoDocenteBean.selectedCursoDocente.docente.idDocente}" required="true">
+                                <f:selectItem itemLabel="Seleccione un docente" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{docenteBean.docentes}" var="docente" itemLabel="#{docente.apellido} #{docente.nombre}" itemValue="#{docente.idDocente}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="grado" value="Grado:" />
+                            <p:selectOneMenu id="grado" value="#{cursoDocenteBean.selectedCursoDocente.grado.idGrado}" required="true">
+                                <f:selectItem itemLabel="Seleccione un grado" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{gradoBean.grados}" var="grado" itemLabel="#{grado.nombreGrado}" itemValue="#{grado.idGrado}" />
+                            </p:selectOneMenu>
+
+                            <p:commandButton value="Guardar" 
+                                             action="#{cursoDocenteBean.saveCursoDocente}"  
+                                             update=":globalMessages"
+                                             oncomplete="PF('cursoDocenteDialog').hide()" />
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
