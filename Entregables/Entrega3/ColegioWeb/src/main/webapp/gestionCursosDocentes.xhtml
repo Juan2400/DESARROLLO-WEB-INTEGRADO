@@ -81,16 +81,28 @@
                     <p:outputPanel id="cursoDocenteDetail">
                         <p:panelGrid layout="grid" columns="2">
                             <p:outputLabel for="curso" value="Curso:" />
-                            <p:selectOneMenu id="curso" value="#{cursoDocenteBean.selectedCursoDocente.curso.idCurso}" required="true">
+                            <p:selectOneMenu id="curso" 
+                                             value="#{cursoDocenteBean.selectedCursoDocente.curso.idCurso}" 
+                                             required="true">
                                 <f:selectItem itemLabel="Seleccione un curso" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{cursoBean.cursos}" var="curso" itemLabel="#{curso.nombreCurso}" itemValue="#{curso.idCurso}" />
+                                <f:selectItems value="#{cursoBean.cursos}" var="curso" 
+                                               itemLabel="#{curso.nombreCurso}" 
+                                               itemValue="#{curso.idCurso}" />
+                                <p:ajax event="change" 
+                                        listener="#{cursoDocenteBean.onCursoSelect}" 
+                                        update="docente" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="docente" value="Docente:" />
-                            <p:selectOneMenu id="docente" value="#{cursoDocenteBean.selectedCursoDocente.docente.idDocente}" required="true">
+                            <p:selectOneMenu id="docente" 
+                                             value="#{cursoDocenteBean.selectedCursoDocente.docente.idDocente}" 
+                                             required="true">
                                 <f:selectItem itemLabel="Seleccione un docente" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{docenteBean.docentes}" var="docente" itemLabel="#{docente.apellido} #{docente.nombre}" itemValue="#{docente.idDocente}" />
+                                <f:selectItems value="#{cursoDocenteBean.docentesFiltrados}" var="docente" 
+                                               itemLabel="#{docente.apellido} #{docente.nombre}" 
+                                               itemValue="#{docente.idDocente}" />
                             </p:selectOneMenu>
+
 
                             <p:outputLabel for="grado" value="Grado:" />
                             <p:selectOneMenu id="grado" value="#{cursoDocenteBean.selectedCursoDocente.grado.idGrado}" required="true">

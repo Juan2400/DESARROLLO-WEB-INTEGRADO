@@ -4,6 +4,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <h:outputScript library="js" name="validations.js" />
         <style type="text/css">
             .ui-datatable .ui-datatable-header {
                 text-align: right !important;
@@ -17,6 +18,7 @@
         </style>
     </h:head>
     <h:body>
+
         <p:growl id="globalMessages" showDetail="true" />
 
         <p:panel header="Gestión de Matrículas">
@@ -31,6 +33,8 @@
                              rowsPerPageTemplate="5,10,15,{ShowAll|'Todos'}"
                              selection="#{matriculaBean.selectedMatricula}"    
                              selectionMode="single">
+
+
                     <f:facet name="header">
                         <p:commandButton value="Nueva Matrícula" 
                                          icon="pi pi-plus" 
@@ -48,14 +52,11 @@
                     <p:column headerText="Grado" sortBy="#{matricula.grado.nombreGrado}" filterBy="#{matricula.grado.nombreGrado}" filterMatchMode="contains">
                         <h:outputText value="#{matricula.grado.nombreGrado}" />
                     </p:column>
-                    <p:column headerText="Tipo" sortBy="#{matricula.tipoMatricula.nombreTipo}" filterBy="#{matricula.tipoMatricula.nombreTipo}" filterMatchMode="contains">
-                        <h:outputText value="#{matricula.tipoMatricula.nombreTipo}" />
-                    </p:column>
                     <p:column headerText="Año" sortBy="#{matricula.anio}" filterBy="#{matricula.anio}" filterMatchMode="contains">
                         <h:outputText value="#{matricula.anio}" />
                     </p:column>
-                    <p:column headerText="Fecha" sortBy="#{matricula.fechaMatricula}" filterBy="#{matricula.fechaMatricula}" filterMatchMode="contains">
-                        <h:outputText value="#{matricula.fechaMatricula}">
+                    <p:column headerText="Fecha de Registro" sortBy="#{matricula.fechaRegistro}" filterBy="#{matricula.fechaRegistro}" filterMatchMode="contains">
+                        <h:outputText value="#{matricula.fechaRegistro}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
@@ -93,32 +94,33 @@
                             <p:outputLabel for="alumno" value="Alumno:" />
                             <p:selectOneMenu id="alumno" value="#{matriculaBean.selectedMatricula.alumno.idAlumno}" required="true">
                                 <f:selectItem itemLabel="Seleccione un alumno" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{alumnoBean.alumnos}" var="alumno" itemLabel="#{alumno.apellido} #{alumno.nombre}" itemValue="#{alumno.idAlumno}" />
+                                <f:selectItems value="#{alumnoBean.alumnos}" var="alumno" 
+                                               itemLabel="#{alumno.apellido} #{alumno.nombre}" 
+                                               itemValue="#{alumno.idAlumno}" />
+                                <p:ajax event="change" listener="#{matriculaBean.onAlumnoSelect}" update="grado" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="grado" value="Grado:" />
                             <p:selectOneMenu id="grado" value="#{matriculaBean.selectedMatricula.grado.idGrado}" required="true">
                                 <f:selectItem itemLabel="Seleccione un grado" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{gradoBean.grados}" var="grado" itemLabel="#{grado.nombreGrado}" itemValue="#{grado.idGrado}" />
+                                <f:selectItems value="#{gradoBean.grados}" var="grado" 
+                                               itemLabel="#{grado.nombreGrado}" 
+                                               itemValue="#{grado.idGrado}" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel for="tipoMatricula" value="Tipo de Matrícula:" />
-                            <p:selectOneMenu id="tipoMatricula" value="#{matriculaBean.selectedMatricula.tipoMatricula.idTipoMatricula}" required="true">
-                                <f:selectItem itemLabel="Seleccione un tipo" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{tipoMatriculaBean.tiposMatricula}" var="tipo" itemLabel="#{tipo.nombreTipo}" itemValue="#{tipo.idTipoMatricula}" />
-                            </p:selectOneMenu>
 
                             <p:outputLabel for="anio" value="Año:" />
                             <p:inputText id="anio" value="#{matriculaBean.selectedMatricula.anio}" required="true" />
 
-                            <p:outputLabel for="fechaMatricula" value="Fecha de Matrícula:" />
-                            <p:calendar id="fechaMatricula" value="#{matriculaBean.selectedMatricula.fechaMatricula}" pattern="dd/MM/yyyy" />
+                            <p:outputLabel for="fechaRegistro" value="Fecha de Registro:" />
+                            <p:calendar id="fechaRegistro" value="#{matriculaBean.selectedMatricula.fechaRegistro}" pattern="dd/MM/yyyy" />
 
                             <p:outputLabel for="observaciones" value="Observaciones:" />
                             <p:inputTextarea id="observaciones" value="#{matriculaBean.selectedMatricula.observaciones}" rows="4" cols="30" maxlength="200" />
 
                             <p:commandButton value="Guardar" 
                                              action="#{matriculaBean.saveMatricula}"  
+                                             onstart="return validarRegistroMatricula();" 
                                              update=":globalMessages :matriculaForm:matriculaTable"
                                              oncomplete="PF('matriculaDialog').hide()" />
                         </p:panelGrid>

@@ -2,6 +2,12 @@ package com.colegio.bean;
 
 import com.colegio.dao.AlumnoDAO;
 import com.colegio.dao.AlumnoDAOImpl;
+import com.colegio.dao.EstadoEstudianteDAO;
+import com.colegio.dao.EstadoEstudianteDAOImpl;
+import com.colegio.dao.GradoDAO;
+import com.colegio.dao.GradoDAOImpl;
+import com.colegio.dao.ResponsableDAO;
+import com.colegio.dao.ResponsableDAOImpl;
 import com.colegio.modelo.Alumno;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -12,7 +18,6 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.List;
 
-
 @Named
 @ViewScoped
 public class AlumnoBean implements Serializable {
@@ -20,6 +25,9 @@ public class AlumnoBean implements Serializable {
     private List<Alumno> alumnos;
     private Alumno selectedAlumno = new Alumno();
     private AlumnoDAO alumnoDAO = new AlumnoDAOImpl();
+    private ResponsableDAO  responsableDAO = new ResponsableDAOImpl();
+    private GradoDAO gradoDAO = new GradoDAOImpl();
+    private EstadoEstudianteDAO estadoEstudianteDAO = new EstadoEstudianteDAOImpl();
 
     @PostConstruct
     public void init() {
@@ -40,18 +48,18 @@ public class AlumnoBean implements Serializable {
             }
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(
-                            FacesMessage.SEVERITY_INFO, 
+                            FacesMessage.SEVERITY_INFO,
                             "Éxito", "Alumno guardado correctamente"));
-            
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(
-                            FacesMessage.SEVERITY_ERROR, 
+                            FacesMessage.SEVERITY_ERROR,
                             "Error", "No se pudo guardar el alumno"));
         }
     }
 
-    public void deleteAlumno(Alumno alumno){
+    public void deleteAlumno(Alumno alumno) {
         alumnoDAO.eliminar(alumno.getIdAlumno());
         alumnos.remove(alumno);
     }

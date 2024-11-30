@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface MatriculaDAO {
     void insertar(Matricula matricula);
-    Matricula obtenerPorId(int idMatricula);
+    Matricula obtenerPorId(int id_matricula);
     List<Matricula> listarTodos();
     void actualizar(Matricula matricula);
-    void eliminar(int idMatricula);
+    void eliminar(int id_matricula);
 }
-//throws SQLException

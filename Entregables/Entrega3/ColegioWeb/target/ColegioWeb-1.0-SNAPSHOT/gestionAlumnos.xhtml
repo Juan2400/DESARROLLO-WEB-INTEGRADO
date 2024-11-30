@@ -4,15 +4,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <h:outputScript library="js" name="validations.js" />
         <style type="text/css">
             .ui-datatable .ui-datatable-header {
                 text-align: right !important;
-            }
-            .column-center {
-                text-align: center;
-            }
-            .column-right {
-                text-align: right;
             }
         </style>
     </h:head>
@@ -42,74 +37,177 @@
                     <p:column headerText="ID">
                         <h:outputText value="#{al.idAlumno}" />
                     </p:column>
-                    <p:column headerText="Nombre" sortBy="#{al.nombre}" filterBy="#{al.nombre}" filterMatchMode="startsWith">
-                        <h:outputText value="#{al.nombre}" />
+                    
+                    <p:column headerText="Código Estudiante" sortBy="#{al.codigoEstudiante}" filterBy="#{al.codigoEstudiante}" filterMatchMode="contains">
+                        <h:outputText value="#{al.codigoEstudiante}" />
                     </p:column>
-                    <p:column headerText="Apellido" sortBy="#{al.apellido}" filterBy="#{al.apellido}" filterMatchMode="startsWith">
-                        <h:outputText value="#{al.apellido}" />
-                    </p:column>
-                    <p:column headerText="DNI" sortBy="#{al.dni}" filterBy="#{al.dni}" filterMatchMode="startsWith">
+                    
+                    <p:column headerText="DNI" sortBy="#{al.dni}" filterBy="#{al.dni}" filterMatchMode="contains">
                         <h:outputText value="#{al.dni}" />
                     </p:column>
-
-                    <p:column headerText="Télfono Apoderado">
-                        <h:outputText value="#{al.telefonoApoderado}" />
+                    
+                    <p:column headerText="Nombre" sortBy="#{al.nombre}" filterBy="#{al.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{al.nombre}" />
                     </p:column>
-                    <p:column headerText="Dirección">
+                    
+                    <p:column headerText="Apellido" sortBy="#{al.apellido}" filterBy="#{al.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{al.apellido}" />
+                    </p:column>
+                    
+                    <p:column headerText="Dirección" sortBy="#{al.direccion}" filterMatchMode="contains">
                         <h:outputText value="#{al.direccion}" />
                     </p:column>
-                    <p:column headerText="Email">
-                        <h:outputText value="#{al.email}" />
+                    
+                    <p:column headerText="Padre">
+                        <h:outputText value="#{al.padre.dni}" />
+                    </p:column>                    
+
+                    <p:column headerText="Madre">
+                        <h:outputText value="#{al.madre.dni}" />
                     </p:column>
+
+                    <p:column headerText="Apoderado">
+                        <h:outputText value="#{al.apoderado.dni}" />
+                    </p:column>
+                    
+                     
+                    
+                    <p:column headerText="Grado">
+                        <h:outputText value="#{al.grado.nombreGrado}" />
+                    </p:column>
+                    
+                    <p:column headerText="Estado Estudiante">
+                        <h:outputText value="#{al.estadoEstudiante.nombre}" />
+                    </p:column>
+                    
                     <p:column headerText="Acciones">
-                        <p:commandButton icon="pi pi-pencil" update=":alumnoDialogForm:alumnoDetail" 
-                                         oncomplete="PF('alumnoDialog').show()" 
-                                         title="Editar" styleClass="ui-button-warning" style="margin-right: 5px;">
+                        <p:commandButton icon="pi pi-pencil" 
+                                         oncomplete="PF('alumnoDialog').show()"
+                                         update=":alumnoDialogForm:alumnoDetail"
+                                         title="Editar" 
+                                         styleClass="ui-button-warning" 
+                                         style="margin-right: 5px;">
                             <f:setPropertyActionListener value="#{al}" target="#{alumnoBean.selectedAlumno}" />
                         </p:commandButton>
-                        <p:commandButton icon="pi pi-trash" actionListener="#{alumnoBean.deleteAlumno(al)}" 
-                                         update=":alumnoForm:alumnoTable :globalMessages" title="Eliminar" styleClass="ui-button-danger">
-                            <p:confirm header="Confirmación" message="¿Está seguro de eliminar este alumno?" icon="pi pi-exclamation-triangle" />
+                        
+                        <p:commandButton icon="pi pi-trash" 
+                                         actionListener="#{alumnoBean.deleteAlumno(al)}"
+                                         update=":alumnoForm:alumnoTable :globalMessages" 
+                                         title="Eliminar" 
+                                         styleClass="ui-button-danger">
+                            <p:confirm header="Confirmación" 
+                                       message="¿Está seguro de eliminar este Alumno?" 
+                                       icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-            </h:form>
 
-            <h:form>
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                    <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
                 </p:confirmDialog>
             </h:form>
-
+            
             <h:form id="alumnoDialogForm">
                 <p:dialog header="Detalles del Alumno"
                           modal="true" 
                           widgetVar="alumnoDialog"
-                          showEffect="fade" hideEffect="fade" resizable="false">
+                          showEffect="fade" hideEffect="fade" 
+                          resizable="false">
                     <p:outputPanel id="alumnoDetail">
                         <p:panelGrid layout="grid" columns="2">
-                            <p:outputLabel for="dni" value="DNI:" />
-                            <p:inputText id="dni" value="#{alumnoBean.selectedAlumno.dni}" required="true" />
-
-                            <p:outputLabel for="nombre" value="Nombre:" />
-                            <p:inputText id="nombre" value="#{alumnoBean.selectedAlumno.nombre}" required="true" />
-
-                            <p:outputLabel for="apellido" value="Apellido:" />
-                            <p:inputText id="apellido" value="#{alumnoBean.selectedAlumno.apellido}" required="true" />
-
-                            <p:outputLabel for="telefono" value="Teléfono Apoderado:" />
-                            <p:inputText id="telefono" value="#{alumnoBean.selectedAlumno.telefonoApoderado}" />
-
-                            <p:outputLabel for="email" value="Email:" />
-                            <p:inputText id="email" value="#{alumnoBean.selectedAlumno.email}" />
-
-                            <p:outputLabel for="direccion" value="Dirección:" />
-                            <p:inputText id="direccion" value="#{alumnoBean.selectedAlumno.direccion}" />
-
+                            <p:outputLabel for="codigoEstudiante" value="Código Estudiante"></p:outputLabel>
+                            <p:inputText id="codigoEstudiante" 
+                                         value="#{alumnoBean.selectedAlumno.codigoEstudiante}"
+                                         required="true">
+                            </p:inputText>
+                            
+                            <p:outputLabel for="dni" value="DNI"></p:outputLabel>
+                            <p:inputText id="dni" 
+                                         value="#{alumnoBean.selectedAlumno.dni}"
+                                         required="true">
+                            </p:inputText>
+                            
+                            <p:outputLabel for="nombre" value="Nombre"></p:outputLabel>
+                            <p:inputText id="nombre" 
+                                         value="#{alumnoBean.selectedAlumno.nombre}"
+                                         required="true">
+                            </p:inputText>
+                            
+                            
+                            
+                            <p:outputLabel for="apellido" value="Apellido"></p:outputLabel>
+                            <p:inputText id="apellido" 
+                                         value="#{alumnoBean.selectedAlumno.apellido}"
+                                         required="true">
+                            </p:inputText>
+                            
+                            
+                            <p:outputLabel for="direccion" value="Dirección"></p:outputLabel>
+                            <p:inputText id="direccion" 
+                                         value="#{alumnoBean.selectedAlumno.direccion}">
+                            </p:inputText>
+                            
+                            <p:outputLabel for="telefonoReferencia" value="Teléfono Referencia"></p:outputLabel>
+                            <p:inputText id="telefonoReferencia" 
+                                         value="#{alumnoBean.selectedAlumno.telefonoReferencia}">
+                            </p:inputText>
+                            
+                            <p:outputLabel for="sexo" value="Sexo:" />
+                            <p:selectOneMenu id="sexo" value="#{alumnoBean.selectedAlumno.sexo}">
+                                <f:selectItem itemValue="M" itemLabel="Masculino" />
+                                <f:selectItem itemValue="F" itemLabel="Femenino" />
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel for="grado" value="Grado:" />
+                            <p:selectOneMenu id="grado" 
+                                             value="#{alumnoBean.selectedAlumno.grado.idGrado}" 
+                                             required="true">
+                                <f:selectItem itemLabel="Seleccione un Grado" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{gradoBean.grados}" var="grado" 
+                                               itemLabel="#{grado.nombreGrado}" 
+                                               itemValue="#{grado.idGrado}" />
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel for="estadoEstudiante" value="Estado Estudiante:" />
+                            <p:selectOneMenu id="estadoEstudiante" 
+                                             value="#{alumnoBean.selectedAlumno.estadoEstudiante.idEstadoEstudiante}">
+                                <f:selectItems value="#{estadoEstudianteBean.estadoEstudiantes}" var="estado" 
+                                               itemLabel="#{estado.nombre}" 
+                                               itemValue="#{estado.idEstadoEstudiante}" />
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel for="padre" value="Padre:" />
+                            <p:selectOneMenu id="padre" 
+                                             value="#{alumnoBean.selectedAlumno.padre.idResponsable}">
+                                <f:selectItem itemLabel="Seleccione un Padre" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{responsableBean.responsables}" var="padre" 
+                                               itemLabel="#{padre.dni}" 
+                                               itemValue="#{padre.idResponsable}" />
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel for="madre" value="Madre:" />
+                            <p:selectOneMenu id="madre" 
+                                             value="#{alumnoBean.selectedAlumno.madre.idResponsable}">
+                                <f:selectItem itemLabel="Seleccione una Madre" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{responsableBean.responsables}" var="madre" 
+                                               itemLabel="#{madre.dni}" 
+                                               itemValue="#{madre.idResponsable}" />
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel for="apoderado" value="Apoderado:" />
+                            <p:selectOneMenu id="apoderado" 
+                                             value="#{alumnoBean.selectedAlumno.apoderado.idResponsable}">
+                                <f:selectItem itemLabel="Seleccione un Apoderado" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{responsableBean.responsables}" var="apoderado" 
+                                               itemLabel="#{apoderado.dni}" 
+                                               itemValue="#{apoderado.idResponsable}" />
+                            </p:selectOneMenu>
+                            
                             <p:commandButton value="Guardar" 
                                              action="#{alumnoBean.saveAlumno}"  
-                                             update=":globalMessages"
+                                             update=":globalMessages :alumnoForm:alumnoTable"
+                                             onstart="return validarRegistroAlumnos();" 
                                              oncomplete="PF('alumnoDialog').hide()" />
                         </p:panelGrid>
                     </p:outputPanel>

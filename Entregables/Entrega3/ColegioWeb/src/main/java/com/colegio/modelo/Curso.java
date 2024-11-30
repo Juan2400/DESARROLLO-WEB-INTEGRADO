@@ -4,9 +4,10 @@ public class Curso {
     private int idCurso;
     private String nombreCurso;
     private String descripcionCurso;
+    private Especialidad especialidad;
 
     public Curso() {
-        
+        this.especialidad = new Especialidad();  // Inicializamos especialidad
     }
 
     public int getIdCurso() {
@@ -31,6 +32,14 @@ public class Curso {
 
     public void setDescripcionCurso(String descripcionCurso) {
         this.descripcionCurso = descripcionCurso;
+    }
+
+    public Especialidad getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(Especialidad especialidad) {
+        this.especialidad = especialidad;
     }
 
 }

@@ -21,7 +21,7 @@ public class GradoBean implements Serializable {
     private GradoDAO gradoDAO = new GradoDAOImpl();
 
     @PostConstruct
-    public void init(){
+    public void init()  {
         grados = gradoDAO.listarTodos();
     }
 

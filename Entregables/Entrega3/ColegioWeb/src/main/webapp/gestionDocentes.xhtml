@@ -5,6 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <h:outputScript library="js" name="validations.js" />
         <style type="text/css">
             .ui-datatable .ui-datatable-header {
                 text-align: right !important;
@@ -17,7 +18,7 @@
             }
         </style>
     </h:head>
-   <h:body>
+    <h:body>
         <p:growl id="globalMessages" showDetail="true" />
 
         <p:panel header="Gestión de Docente">
@@ -39,12 +40,11 @@
                                          oncomplete="PF('docenteDialog').show()"
                                          update=":docenteDialogForm:docenteDetail" />
                     </f:facet>
+
                     <p:column headerText="ID">
                         <h:outputText value="#{doc.idDocente}" />
                     </p:column>
-                    <p:column headerText="Especialidad" sortBy="#{doc.especialidad}" filterBy="#{doc.especialidad}" filterMatchMode="contains">
-                        <h:outputText value="#{doc.especialidad}" />
-                    </p:column>
+
                     <p:column headerText="DNI" sortBy="#{doc.dni}" filterBy="#{doc.dni}" filterMatchMode="contains">
                         <h:outputText value="#{doc.dni}" />
                     </p:column>
@@ -60,11 +60,21 @@
                     <p:column headerText="Email" sortBy="#{doc.email}" filterBy="#{doc.email}" filterMatchMode="contains">
                         <h:outputText value="#{doc.email}" />
                     </p:column>
+                    <p:column headerText="Especialidad" sortBy="#{doc.especialidad.nombre}" filterBy="#{doc.especialidad.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.especialidad.nombre}" />
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{doc.estado}" filterBy="#{doc.estado}" filterMatchMode="contains">
+                        <h:outputText value="#{doc.estado}" />
+                    </p:column>
+
                     <p:column headerText="Acciones">
-                        <p:commandButton icon="pi pi-pencil" update=":docenteDialogForm:docenteDetail"
+                        <p:commandButton icon="pi pi-pencil" 
                                          oncomplete="PF('docenteDialog').show()"
-                                         title="Editar" styleClass="ui-button-warning" style="margin-right: 5px;">
-                            <f:setPropertyActionListener value="#{doc}" target="#{docenteBean.selectedDocente}" />   
+                                         update=":docenteDialogForm:docenteDetail"
+                                         title="Editar" 
+                                         styleClass="ui-button-warning" 
+                                         style="margin-right: 5px;">
+                            <f:setPropertyActionListener value="#{doc}" target="#{docenteBean.selectedDocente}" />
                         </p:commandButton>
                         <p:commandButton icon="pi pi-trash" actionListener="#{docenteBean.deleteDocente(doc)}"
                                          update=":docenteForm:docenteTable :globalMessages" title="Eliminar" styleClass="ui-button-danger">
@@ -72,31 +82,24 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-            </h:form>
-            
-            <h:form>
+
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
                     <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary" icon="pi pi-times" />
                 </p:confirmDialog>
             </h:form>
-            
+
             <h:form id="docenteDialogForm">
                 <p:dialog header="Detalles del Docente"
                           modal="true" 
                           widgetVar="docenteDialog"
-                          showEffect="fade" hideEffect="fade" resizable="false">
+                          showEffect="fade" hideEffect="fade" 
+                          resizable="false">
                     <p:outputPanel id="docenteDetail">
                         <p:panelGrid layout="grid" columns="2">
-                            
                             <p:outputLabel for="dni" value="DNI"></p:outputLabel>
                             <p:inputText id="dni" 
                                          value="#{docenteBean.selectedDocente.dni}"
-                                         required="true">
-                            </p:inputText>
-                            <p:outputLabel for="especialidad" value="Especialidad"></p:outputLabel>
-                            <p:inputText id="especialidad" 
-                                         value="#{docenteBean.selectedDocente.especialidad}"
                                          required="true">
                             </p:inputText>
                             <p:outputLabel for="nombre" value="Nombre"></p:outputLabel>
@@ -120,9 +123,27 @@
                                          required="true">
                             </p:inputText>
                             
+                            <p:outputLabel for="especialidad" value="Especialidad:" />
+                            <p:selectOneMenu id="especialidad" 
+                                             value="#{docenteBean.selectedDocente.especialidad.idEspecialidad}" 
+                                             required="true">
+                                <f:selectItem itemLabel="Seleccione una Especialidad" itemValue="" noSelectionOption="true" />
+                                <f:selectItems value="#{especialidadBean.especialidades}" var="especialidad" 
+                                               itemLabel="#{especialidad.nombre}" 
+                                               itemValue="#{especialidad.idEspecialidad}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="estado" value="Estado:" />
+                            <p:selectOneMenu id="estado" 
+                                             value="#{docenteBean.selectedDocente.estado}">
+                                <f:selectItem itemValue="Activo" itemLabel="Activo" />
+                                <f:selectItem itemValue="Licencia" itemLabel="Licencia" />
+                            </p:selectOneMenu>
+
                             <p:commandButton value="Guardar" 
                                              action="#{docenteBean.saveDocente}"  
-                                             update="globalMessages"
+                                             update=":globalMessages :docenteForm:docenteTable"
+                                             onstart="return validarRegistroDocente();" 
                                              oncomplete="PF('docenteDialog').hide()" />
                         </p:panelGrid>
                     </p:outputPanel>

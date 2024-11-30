@@ -1,7 +1,12 @@
 package com.colegio.bean;
 
+import com.colegio.dao.AlumnoDAO;
+import com.colegio.dao.AlumnoDAOImpl;
+import com.colegio.dao.GradoDAO;
+import com.colegio.dao.GradoDAOImpl;
 import com.colegio.dao.MatriculaDAO;
 import com.colegio.dao.MatriculaDAOImpl;
+import com.colegio.modelo.Alumno;
 import com.colegio.modelo.Matricula;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
@@ -16,14 +21,18 @@ import java.util.List;
 public class MatriculaBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private MatriculaDAO matriculaDAO;
+    private AlumnoDAO alumnoDAO;
+    private GradoDAO gradoDAO;
     private List<Matricula> matriculas;
     private Matricula selectedMatricula = new Matricula();
 
     @PostConstruct
     public void init() {
         matriculaDAO = new MatriculaDAOImpl();
+        alumnoDAO = new AlumnoDAOImpl();
+        gradoDAO = new GradoDAOImpl();
         loadMatriculas();
     }
 
@@ -35,25 +44,39 @@ public class MatriculaBean implements Serializable {
         this.selectedMatricula = new Matricula();
     }
 
+    public void onAlumnoSelect() {
+        if (this.selectedMatricula != null && this.selectedMatricula.getAlumno() != null) {
+            Alumno alumno = alumnoDAO.obtenerPorId(this.selectedMatricula.getAlumno().getIdAlumno());
+            if (alumno != null) {
+                // Establecer el grado actual del alumno en la matrícula seleccionada
+                this.selectedMatricula.setGrado(alumno.getGrado());
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                                "No se pudo cargar la información del alumno seleccionado."));
+            }
+        }
+    }
+
     public void saveMatricula() {
         try {
             if (this.selectedMatricula.getIdMatricula() == 0) {
                 matriculaDAO.insertar(this.selectedMatricula);
                 loadMatriculas();
-                FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Matrícula Creada", 
-                    "La matrícula se ha creado exitosamente"));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Matrícula Creada",
+                                "La matrícula se ha creado exitosamente"));
             } else {
                 matriculaDAO.actualizar(this.selectedMatricula);
                 loadMatriculas();
-                FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Matrícula Actualizada", 
-                    "La matrícula se ha actualizado exitosamente"));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Matrícula Actualizada",
+                                "La matrícula se ha actualizado exitosamente"));
             }
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", 
-                "Ocurrió un error al guardar la matrícula"));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                            "Ocurrió un error al guardar la matrícula"));
         }
     }
 
@@ -61,16 +84,17 @@ public class MatriculaBean implements Serializable {
         try {
             matriculaDAO.eliminar(matricula.getIdMatricula());
             matriculas.remove(matricula);
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Matrícula Eliminada", 
-                "La matrícula se ha eliminado exitosamente"));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Matrícula Eliminada",
+                            "La matrícula se ha eliminado exitosamente"));
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", 
-                "Ocurrió un error al eliminar la matrícula"));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+                            "Ocurrió un error al eliminar la matrícula"));
         }
     }
 
+    // Getters y Setters
     public List<Matricula> getMatriculas() {
         return matriculas;
     }
@@ -87,3 +111,6 @@ public class MatriculaBean implements Serializable {
         this.selectedMatricula = selectedMatricula;
     }
 }
+
+
+

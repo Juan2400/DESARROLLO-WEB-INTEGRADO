@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CursoDocenteDAO {
     void insertar(CursoDocente cursoDocente);
-    CursoDocente obtenerPorId(int idCursoDocente);
+    CursoDocente obtenerPorId(int id);
     List<CursoDocente> listarTodos();
     void actualizar(CursoDocente cursoDocente);
-    void eliminar(int idCursoDocente);
+    void eliminar(int id);
 }
-//throws SQLException
+//
