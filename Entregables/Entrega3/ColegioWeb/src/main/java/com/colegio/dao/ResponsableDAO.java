@@ -7,6 +7,7 @@ import java.util.List;
 public interface ResponsableDAO {
     void insertar(Responsable responsable);
     Responsable obtenerPorId(int idResponsable);
+    List<Responsable> buscarPorSexo(String sexo);
     List<Responsable> listarTodos();
     void actualizar(Responsable responsable);
     void eliminar(int idResponsable);

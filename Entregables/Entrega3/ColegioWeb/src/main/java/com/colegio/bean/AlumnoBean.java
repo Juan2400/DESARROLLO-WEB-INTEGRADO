@@ -9,6 +9,7 @@ import com.colegio.dao.GradoDAOImpl;
 import com.colegio.dao.ResponsableDAO;
 import com.colegio.dao.ResponsableDAOImpl;
 import com.colegio.modelo.Alumno;
+import com.colegio.modelo.Responsable;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -29,6 +30,11 @@ public class AlumnoBean implements Serializable {
     private GradoDAO gradoDAO;
     private EstadoEstudianteDAO estadoEstudianteDAO;
 
+    // New fields for filtering
+    private List<Responsable> padres;
+    private List<Responsable> madres;
+    private List<Responsable> apoderados;
+
     @PostConstruct
     public void init() {
         alumnoDAO = new AlumnoDAOImpl();
@@ -36,6 +42,11 @@ public class AlumnoBean implements Serializable {
         gradoDAO = new GradoDAOImpl();
         estadoEstudianteDAO = new EstadoEstudianteDAOImpl();
         loadAlumnos();
+
+        // Inicializar listas de responsables filtrados por género
+        padres = responsableDAO.buscarPorSexo("M");
+        madres = responsableDAO.buscarPorSexo("F");
+        apoderados = responsableDAO.listarTodos(); // Todos pueden ser apoderados
     }
 
     private void loadAlumnos() {
@@ -72,7 +83,19 @@ public class AlumnoBean implements Serializable {
         alumnoDAO.eliminar(alumno.getIdAlumno());
         alumnos.remove(alumno);
     }
+    
+    public List<Responsable> getPadres() {
+        return padres;
+    }
 
+    public List<Responsable> getMadres() {
+        return madres;
+    }
+
+    public List<Responsable> getApoderados() {
+        return apoderados;
+    }
+    
     public List<Alumno> getAlumnos() {
         return alumnos;
     }

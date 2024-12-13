@@ -11,6 +11,8 @@ public interface AlumnoDAO {
     Alumno obtenerPorId(int idAlumno);
 
     List<Alumno> listarTodos();
+    
+    List<Alumno> buscarPorDNI(String dni);
 
     void actualizar(Alumno alumno);
 

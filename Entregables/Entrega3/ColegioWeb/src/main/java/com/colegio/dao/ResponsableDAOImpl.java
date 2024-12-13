@@ -10,10 +10,9 @@ import java.util.List;
 public class ResponsableDAOImpl implements ResponsableDAO {
 
     @Override
-    public void insertar(Responsable responsable){
+    public void insertar(Responsable responsable) {
         String sql = "INSERT INTO Responsables (dni, nombre, apellido, sexo, telefono, email, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, responsable.getDni());
             pstmt.setString(2, responsable.getNombre());
@@ -32,15 +31,14 @@ public class ResponsableDAOImpl implements ResponsableDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);  
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Responsable obtenerPorId(int idResponsable) {
         String sql = "SELECT * FROM Responsables WHERE id_responsable = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idResponsable);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -65,12 +63,36 @@ public class ResponsableDAOImpl implements ResponsableDAO {
     }
 
     @Override
+    public List<Responsable> buscarPorSexo(String sexo) {
+        List<Responsable> responsables = new ArrayList<>();
+        String sql = "SELECT * FROM Responsables WHERE sexo = ?";
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, sexo);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Responsable responsable = new Responsable();
+                    responsable.setIdResponsable(rs.getInt("id_responsable"));
+                    responsable.setDni(rs.getString("dni"));
+                    responsable.setNombre(rs.getString("nombre"));
+                    responsable.setApellido(rs.getString("apellido"));
+                    responsable.setSexo(rs.getString("sexo"));
+                    responsable.setTelefono(rs.getString("telefono"));
+                    responsable.setEmail(rs.getString("email"));
+                    responsable.setDireccion(rs.getString("direccion"));
+                    responsables.add(responsable);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return responsables;
+    }
+
+    @Override
     public List<Responsable> listarTodos() {
         List<Responsable> responsables = new ArrayList<>();
         String sql = "SELECT * FROM Responsables";
-        try (Connection conn = ConexionBD.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 // Asignación directa de los valores del ResultSet al objeto Responsable
@@ -94,8 +116,7 @@ public class ResponsableDAOImpl implements ResponsableDAO {
     @Override
     public void actualizar(Responsable responsable) {
         String sql = "UPDATE Responsables SET dni = ?, nombre = ?, apellido = ?, sexo = ?, telefono = ?, email = ?, direccion = ? WHERE id_responsable = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, responsable.getDni());
             pstmt.setString(2, responsable.getNombre());
@@ -108,15 +129,14 @@ public class ResponsableDAOImpl implements ResponsableDAO {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);  
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void eliminar(int idResponsable) {
         String sql = "DELETE FROM Responsables WHERE id_responsable = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idResponsable);
             pstmt.executeUpdate();

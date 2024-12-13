@@ -136,7 +136,8 @@
                           modal="true" 
                           widgetVar="alumnoDialog"
                           showEffect="fade" hideEffect="fade" 
-                          resizable="false">
+                          resizable="false"
+                          style="max-height: 500px; overflow-y: auto;">
                     <p:outputPanel id="alumnoDetail">
                         <p:panelGrid layout="grid" columns="2">
                             <p:outputLabel for="codigoEstudiante" value="Código Estudiante"></p:outputLabel>
@@ -201,29 +202,38 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel for="padre" value="Padre:" />
-                            <p:selectOneMenu id="padre" 
-                                             value="#{alumnoBean.selectedAlumno.padre.idResponsable}">
-                                <f:selectItem itemLabel="Seleccione un Padre" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{responsableBean.responsables}" var="padre" 
-                                               itemLabel="#{padre.dni}" 
+                            <p:selectOneMenu id="padre"
+                                             value="#{alumnoBean.selectedAlumno.padre.idResponsable}"
+                                             filter="true"
+                                             filterMatchMode="contains">
+                                <f:selectItem itemLabel="Seleccione un Padre" itemValue=""
+                                              noSelectionOption="true" />
+                                <f:selectItems value="#{alumnoBean.padres}" var="padre"
+                                               itemLabel="#{padre.dni} - #{padre.apellido}, #{padre.nombre}"
                                                itemValue="#{padre.idResponsable}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="madre" value="Madre:" />
-                            <p:selectOneMenu id="madre" 
-                                             value="#{alumnoBean.selectedAlumno.madre.idResponsable}">
-                                <f:selectItem itemLabel="Seleccione una Madre" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{responsableBean.responsables}" var="madre" 
-                                               itemLabel="#{madre.dni}" 
+                            <p:selectOneMenu id="madre"
+                                             value="#{alumnoBean.selectedAlumno.madre.idResponsable}"
+                                             filter="true"
+                                             filterMatchMode="contains">
+                                <f:selectItem itemLabel="Seleccione una Madre" itemValue=""
+                                              noSelectionOption="true" />
+                                <f:selectItems value="#{alumnoBean.madres}" var="madre"
+                                               itemLabel="#{madre.dni} - #{madre.apellido}, #{madre.nombre}"
                                                itemValue="#{madre.idResponsable}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="apoderado" value="Apoderado:" />
-                            <p:selectOneMenu id="apoderado" 
-                                             value="#{alumnoBean.selectedAlumno.apoderado.idResponsable}">
-                                <f:selectItem itemLabel="Seleccione un Apoderado" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{responsableBean.responsables}" var="apoderado" 
-                                               itemLabel="#{apoderado.dni}" 
+                            <p:selectOneMenu id="apoderado"
+                                             value="#{alumnoBean.selectedAlumno.apoderado.idResponsable}"
+                                             filter="true"
+                                             filterMatchMode="contains">
+                                <f:selectItem itemLabel="Seleccione un Apoderado" itemValue=""
+                                              noSelectionOption="true" />
+                                <f:selectItems value="#{alumnoBean.apoderados}" var="apoderado"
+                                               itemLabel="#{apoderado.dni} - #{apoderado.apellido}, #{apoderado.nombre}"
                                                itemValue="#{apoderado.idResponsable}" />
                             </p:selectOneMenu>
 
@@ -236,6 +246,7 @@
                     </p:outputPanel>
                 </p:dialog>
             </h:form>
+
         </p:panel>
     </h:body>
 </html>

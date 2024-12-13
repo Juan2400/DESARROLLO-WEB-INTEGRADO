@@ -27,6 +27,8 @@ public class MatriculaBean implements Serializable {
     private GradoDAO gradoDAO;
     private List<Matricula> matriculas;
     private Matricula selectedMatricula = new Matricula();
+    private String dniBusqueda;
+    private List<Alumno> alumnosFiltrados;
 
     @PostConstruct
     public void init() {
@@ -34,6 +36,7 @@ public class MatriculaBean implements Serializable {
         alumnoDAO = new AlumnoDAOImpl();
         gradoDAO = new GradoDAOImpl();
         loadMatriculas();
+        alumnosFiltrados = alumnoDAO.listarTodos(); // Mostrar todos los alumnos inicialmente
     }
 
     private void loadMatriculas() {
@@ -54,6 +57,14 @@ public class MatriculaBean implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
                                 "No se pudo cargar la información del alumno seleccionado."));
             }
+        }
+    }
+
+    public void filtrarAlumnosPorDNI() {
+        if (dniBusqueda == null || dniBusqueda.isEmpty()) {
+            alumnosFiltrados = alumnoDAO.listarTodos();
+        } else {
+            alumnosFiltrados = alumnoDAO.buscarPorDNI(dniBusqueda);
         }
     }
 
@@ -107,6 +118,22 @@ public class MatriculaBean implements Serializable {
 
     public void setSelectedMatricula(Matricula selectedMatricula) {
         this.selectedMatricula = selectedMatricula;
+    }
+
+    public String getDniBusqueda() {
+        return dniBusqueda;
+    }
+
+    public void setDniBusqueda(String dniBusqueda) {
+        this.dniBusqueda = dniBusqueda;
+    }
+
+    public List<Alumno> getAlumnosFiltrados() {
+        return alumnosFiltrados;
+    }
+
+    public void setAlumnosFiltrados(List<Alumno> alumnosFiltrados) {
+        this.alumnosFiltrados = alumnosFiltrados;
     }
 
 }

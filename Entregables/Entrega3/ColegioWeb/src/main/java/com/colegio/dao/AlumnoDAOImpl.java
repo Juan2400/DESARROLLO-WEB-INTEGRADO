@@ -113,7 +113,42 @@ public class AlumnoDAOImpl implements AlumnoDAO {
         return alumnos;
     }
 
-    
+    @Override
+    public List<Alumno> buscarPorDNI(String dni) {
+        List<Alumno> alumnos = new ArrayList<>();
+        String sql = "SELECT * FROM Alumnos WHERE dni LIKE ?";
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "%" + dni + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Alumno alumno = new Alumno();
+                    alumno.setIdAlumno(rs.getInt("id_alumno"));
+                    alumno.setCodigoEstudiante(rs.getString("codigo_estudiante"));
+                    alumno.setDni(rs.getString("dni"));
+                    alumno.setNombre(rs.getString("nombre"));
+                    alumno.setApellido(rs.getString("apellido"));
+
+                    ResponsableDAO responsableDAO = new ResponsableDAOImpl();
+                    alumno.setPadre(responsableDAO.obtenerPorId(rs.getInt("id_padre")));
+                    alumno.setMadre(responsableDAO.obtenerPorId(rs.getInt("id_madre")));
+                    alumno.setApoderado(responsableDAO.obtenerPorId(rs.getInt("id_apoderado")));
+
+                    EstadoEstudianteDAO estadoEstudianteDAO = new EstadoEstudianteDAOImpl();
+                    alumno.setEstadoEstudiante(estadoEstudianteDAO.obtenerPorId(rs.getInt("id_estado_estudiante")));
+
+                    GradoDAO gradoDAO = new GradoDAOImpl();
+                    alumno.setGrado(gradoDAO.obtenerPorId(rs.getInt("id_grado")));
+
+                    alumnos.add(alumno);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return alumnos;
+    }
+
     @Override
     public void actualizar(Alumno alumno) {
         String sql = "UPDATE Alumnos SET codigo_estudiante = ?, dni = ?, nombre = ?, apellido = ?, direccion = ?, sexo = ?, telefono_referencia = ?, id_padre = ?, id_madre = ?, id_apoderado = ?, id_estado_estudiante = ?, id_grado = ? WHERE id_alumno = ?";
