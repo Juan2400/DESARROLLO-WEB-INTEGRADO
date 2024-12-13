@@ -11,4 +11,3 @@ public interface CursoDocenteDAO {
     void actualizar(CursoDocente cursoDocente);
     void eliminar(int id);
 }
-//

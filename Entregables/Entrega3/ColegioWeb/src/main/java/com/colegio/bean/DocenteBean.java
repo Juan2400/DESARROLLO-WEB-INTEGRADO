@@ -19,38 +19,37 @@ public class DocenteBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private DocenteDAO docenteDAO;  // Instancia manual del DAO
-    private EspecialidadDAO especialidadDAO;  // Instancia manual del DAO
+    private DocenteDAO docenteDAO;  
+    private EspecialidadDAO especialidadDAO;  
     
     private List<Docente> docentes;
     private Docente selectedDocente = new Docente();
 
     @PostConstruct
     public void init() {
-        // Instanciamos los DAOs manualmente
         docenteDAO = new DocenteDAOImpl();
         especialidadDAO = new EspecialidadDAOImpl();
         
-        loadDocentes();  // Cargar la lista de docentes al inicio
+        loadDocentes();  
     }
 
     private void loadDocentes() {
-        docentes = docenteDAO.listarTodos();  // Obtener todos los docentes desde el DAO
+        docentes = docenteDAO.listarTodos(); 
     }
 
     public void prepareNewDocente() {
-        this.selectedDocente = new Docente();  // Preparar un nuevo docente para creación
+        this.selectedDocente = new Docente();  
     }
 
     public void saveDocente() {
         try {
             if (selectedDocente.getIdDocente() == 0) {
-                docenteDAO.insertar(selectedDocente);  // Insertar un nuevo docente
-                docentes.add(this.selectedDocente);  // Agregar el docente a la lista
+                docenteDAO.insertar(selectedDocente); 
+                docentes.add(this.selectedDocente);  
                 showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Docente registrado correctamente");
             } else {
-                docenteDAO.actualizar(selectedDocente);  // Actualizar los datos del docente existente
-                loadDocentes();  // Recargar la lista de docentes
+                docenteDAO.actualizar(selectedDocente);  
+                loadDocentes();  
                 showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Docente actualizado correctamente");
             }
         } catch (Exception e) {
@@ -61,8 +60,8 @@ public class DocenteBean implements Serializable {
 
     public void deleteDocente(Docente docente) {
         try {
-            docenteDAO.eliminar(docente.getIdDocente());  // Eliminar el docente
-            docentes.remove(docente);  // Eliminar el docente de la lista
+            docenteDAO.eliminar(docente.getIdDocente()); 
+            docentes.remove(docente);  
             showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Docente eliminado correctamente");
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +73,6 @@ public class DocenteBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    // Métodos Getter y Setter
     public List<Docente> getDocentes() {
         return docentes;
     }

@@ -8,11 +8,10 @@ public class Docente {
     private String telefono;
     private String email;
     private Especialidad especialidad;
-    private String estado;  // Manteniendo String para estado
+    private String estado;  
 
-    // Constructor sin parámetros
     public Docente() {
-        this.especialidad = new Especialidad();  // Inicializamos especialidad
+        this.especialidad = new Especialidad();  
     }
 
     public int getIdDocente() {

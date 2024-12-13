@@ -5,6 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
         <h:outputScript library="js" name="validations.js" />
         <style type="text/css">
             .ui-datatable .ui-datatable-header {
@@ -15,6 +16,12 @@
             }
             .column-right {
                 text-align: right;
+            }
+            /* Estilo para alinear los botones */
+            .header-buttons {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
             }
         </style>
     </h:head>
@@ -33,12 +40,21 @@
                              rowsPerPageTemplate="2,4,6,{ShowAll|'Todos'}"
                              selection="#{docenteBean.selectedDocente}"
                              selectionMode="single">
+
                     <f:facet name="header">
-                        <p:commandButton value="Nuevo Docente"
-                                         icon="pi pi-plus"
-                                         actionListener="#{docenteBean.prepareNewDocente}"
-                                         oncomplete="PF('docenteDialog').show()"
-                                         update=":docenteDialogForm:docenteDetail" />
+                        <div class="header-buttons">
+                            <h:form>
+                                <h:link outcome="index" styleClass="btn btn-secondary">
+                                    <i class="pi pi-arrow-left"></i> Volver a Inicio
+                                </h:link>
+                            </h:form>
+
+                            <p:commandButton value="Nuevo Docente"
+                                             icon="pi pi-plus"
+                                             actionListener="#{docenteBean.prepareNewDocente}"
+                                             oncomplete="PF('docenteDialog').show()"
+                                             update=":docenteDialogForm:docenteDetail" />
+                        </div>
                     </f:facet>
 
                     <p:column headerText="ID">
@@ -68,11 +84,11 @@
                     </p:column>
 
                     <p:column headerText="Acciones">
-                        <p:commandButton icon="pi pi-pencil" 
+                        <p:commandButton icon="pi pi-pencil"
                                          oncomplete="PF('docenteDialog').show()"
                                          update=":docenteDialogForm:docenteDetail"
-                                         title="Editar" 
-                                         styleClass="ui-button-warning" 
+                                         title="Editar"
+                                         styleClass="ui-button-warning"
                                          style="margin-right: 5px;">
                             <f:setPropertyActionListener value="#{doc}" target="#{docenteBean.selectedDocente}" />
                         </p:commandButton>
@@ -91,59 +107,60 @@
 
             <h:form id="docenteDialogForm">
                 <p:dialog header="Detalles del Docente"
-                          modal="true" 
+                          modal="true"
                           widgetVar="docenteDialog"
-                          showEffect="fade" hideEffect="fade" 
+                          showEffect="fade" hideEffect="fade"
                           resizable="false">
                     <p:outputPanel id="docenteDetail">
                         <p:panelGrid layout="grid" columns="2">
                             <p:outputLabel for="dni" value="DNI"></p:outputLabel>
-                            <p:inputText id="dni" 
+                            <p:inputText id="dni"
                                          value="#{docenteBean.selectedDocente.dni}"
                                          required="true">
                             </p:inputText>
                             <p:outputLabel for="nombre" value="Nombre"></p:outputLabel>
-                            <p:inputText id="nombre" 
+                            <p:inputText id="nombre"
                                          value="#{docenteBean.selectedDocente.nombre}"
                                          required="true">
                             </p:inputText>
                             <p:outputLabel for="apellido" value="Apellido"></p:outputLabel>
-                            <p:inputText id="apellido" 
+                            <p:inputText id="apellido"
                                          value="#{docenteBean.selectedDocente.apellido}"
                                          required="true">
                             </p:inputText>
                             <p:outputLabel for="telefono" value="Telefono"></p:outputLabel>
-                            <p:inputText id="telefono" 
+                            <p:inputText id="telefono"
                                          value="#{docenteBean.selectedDocente.telefono}"
                                          required="true">
                             </p:inputText>
                             <p:outputLabel for="email" value="Email"></p:outputLabel>
-                            <p:inputText id="email" 
+                            <p:inputText id="email"
                                          value="#{docenteBean.selectedDocente.email}"
                                          required="true">
                             </p:inputText>
-                            
+
                             <p:outputLabel for="especialidad" value="Especialidad:" />
-                            <p:selectOneMenu id="especialidad" 
-                                             value="#{docenteBean.selectedDocente.especialidad.idEspecialidad}" 
+                            <p:selectOneMenu id="especialidad"
+                                             value="#{docenteBean.selectedDocente.especialidad.idEspecialidad}"
                                              required="true">
                                 <f:selectItem itemLabel="Seleccione una Especialidad" itemValue="" noSelectionOption="true" />
-                                <f:selectItems value="#{especialidadBean.especialidades}" var="especialidad" 
-                                               itemLabel="#{especialidad.nombre}" 
+                                <f:selectItems value="#{especialidadBean.especialidades}" var="especialidad"
+                                               itemLabel="#{especialidad.nombre}"
                                                itemValue="#{especialidad.idEspecialidad}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel for="estado" value="Estado:" />
-                            <p:selectOneMenu id="estado" 
+                            <p:selectOneMenu id="estado"
                                              value="#{docenteBean.selectedDocente.estado}">
                                 <f:selectItem itemValue="Activo" itemLabel="Activo" />
                                 <f:selectItem itemValue="Licencia" itemLabel="Licencia" />
                             </p:selectOneMenu>
 
-                            <p:commandButton value="Guardar" 
-                                             action="#{docenteBean.saveDocente}"  
+                            <p:commandButton value="Guardar"
+                                             action="#{docenteBean.saveDocente}"
+
                                              update=":globalMessages :docenteForm:docenteTable"
-                                             onstart="return validarRegistroDocente();" 
+                                             onstart="return validarRegistroDocente();"
                                              oncomplete="PF('docenteDialog').hide()" />
                         </p:panelGrid>
                     </p:outputPanel>

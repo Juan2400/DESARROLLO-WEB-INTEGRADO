@@ -10,8 +10,6 @@ public class Alumno {
     private String direccion;
     private String sexo; // 'M' o 'F'
     private String telefonoReferencia;
-
-    // Relaciones con otras clases (representan las Foreign Keys)
     private Responsable padre;
     private Responsable madre;
     private Responsable apoderado;

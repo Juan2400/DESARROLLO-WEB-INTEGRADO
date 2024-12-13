@@ -13,7 +13,6 @@ public class MatriculaDAOImpl implements MatriculaDAO {
     private AlumnoDAO alumnoDAO = new AlumnoDAOImpl();
     private GradoDAO gradoDAO = new GradoDAOImpl();
 
-    // Método para insertar matrícula
     @Override
     public void insertar(Matricula matricula) {
         String sql = "INSERT INTO Matriculas (id_alumno, id_grado, anio, fecha_registro, observaciones) VALUES (?, ?, ?, ?, ?)";
@@ -39,7 +38,6 @@ public class MatriculaDAOImpl implements MatriculaDAO {
         }
     }
 
-    // Método para listar todas las matrículas
     @Override
     public List<Matricula> listarTodos() {
         List<Matricula> matriculas = new ArrayList<>();
@@ -53,7 +51,7 @@ public class MatriculaDAOImpl implements MatriculaDAO {
                 Matricula matricula = new Matricula();
                 matricula.setIdMatricula(rs.getInt("id_matricula"));
                 
-                // Obtenemos las relaciones de la tabla (Alumno, Grado)
+  
                 Alumno alumno = alumnoDAO.obtenerPorId(rs.getInt("id_alumno"));
                 matricula.setAlumno(alumno);
                 
@@ -72,7 +70,6 @@ public class MatriculaDAOImpl implements MatriculaDAO {
         return matriculas;
     }
 
-    // Método para obtener matrícula por ID
     @Override
     public Matricula obtenerPorId(int idMatricula) {
         String sql = "SELECT id_matricula, id_alumno, id_grado, anio, fecha_registro, observaciones FROM Matriculas WHERE id_matricula = ?";
@@ -104,7 +101,6 @@ public class MatriculaDAOImpl implements MatriculaDAO {
         return null;
     }
 
-    // Método para actualizar matrícula
     @Override
     public void actualizar(Matricula matricula){
         String sql = "UPDATE Matriculas SET id_alumno = ?, id_grado = ?, anio = ?, fecha_registro = ?, observaciones = ? WHERE id_matricula = ?";
@@ -125,7 +121,6 @@ public class MatriculaDAOImpl implements MatriculaDAO {
         }
     }
 
-    // Método para eliminar matrícula
     @Override
     public void eliminar(int idMatricula) {
         String sql = "DELETE FROM Matriculas WHERE id_matricula = ?";

@@ -2,14 +2,16 @@ package com.colegio.modelo;
 
 public class Docente {
     private int idDocente;
-    private String especialidad;
     private String dni;
     private String nombre;
     private String apellido;
     private String telefono;
     private String email;
+    private Especialidad especialidad;
+    private String estado;  
 
     public Docente() {
+        this.especialidad = new Especialidad();  
     }
 
     public int getIdDocente() {
@@ -18,14 +20,6 @@ public class Docente {
 
     public void setIdDocente(int idDocente) {
         this.idDocente = idDocente;
-    }
-
-    public String getEspecialidad() {
-        return especialidad;
-    }
-
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
     }
 
     public String getDni() {
@@ -68,4 +62,20 @@ public class Docente {
         this.email = email;
     }
 
+    public Especialidad getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(Especialidad especialidad) {
+        this.especialidad = especialidad;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+ 
 }

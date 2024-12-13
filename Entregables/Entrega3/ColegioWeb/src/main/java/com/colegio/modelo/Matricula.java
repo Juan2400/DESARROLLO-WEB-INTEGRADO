@@ -16,7 +16,6 @@ public class Matricula {
         this.grado = new Grado();   
     }
 
-    // Getters y Setters
     public int getIdMatricula() {
         return idMatricula;
     }

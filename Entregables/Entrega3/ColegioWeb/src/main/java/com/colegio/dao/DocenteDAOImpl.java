@@ -86,7 +86,6 @@ public class DocenteDAOImpl implements DocenteDAO {
                     docente.setEmail(rs.getString("email"));
                     docente.setEstado(rs.getString("estado"));
                     
-                    // Setear la especialidad
                     Especialidad especialidad = new Especialidad();
                     especialidad.setIdEspecialidad(rs.getInt("id_especialidad"));
                     docente.setEspecialidad(especialidad);
@@ -162,7 +161,7 @@ public class DocenteDAOImpl implements DocenteDAO {
             pstmt.setInt(1, idDocente);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();  // Aquí también sería útil usar un logger
+            e.printStackTrace(); 
         }
     }
 }

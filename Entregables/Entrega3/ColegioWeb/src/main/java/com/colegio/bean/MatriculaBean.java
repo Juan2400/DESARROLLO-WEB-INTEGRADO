@@ -48,7 +48,6 @@ public class MatriculaBean implements Serializable {
         if (this.selectedMatricula != null && this.selectedMatricula.getAlumno() != null) {
             Alumno alumno = alumnoDAO.obtenerPorId(this.selectedMatricula.getAlumno().getIdAlumno());
             if (alumno != null) {
-                // Establecer el grado actual del alumno en la matrícula seleccionada
                 this.selectedMatricula.setGrado(alumno.getGrado());
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -94,7 +93,6 @@ public class MatriculaBean implements Serializable {
         }
     }
 
-    // Getters y Setters
     public List<Matricula> getMatriculas() {
         return matriculas;
     }
@@ -110,7 +108,5 @@ public class MatriculaBean implements Serializable {
     public void setSelectedMatricula(Matricula selectedMatricula) {
         this.selectedMatricula = selectedMatricula;
     }
+
 }
-
-
-

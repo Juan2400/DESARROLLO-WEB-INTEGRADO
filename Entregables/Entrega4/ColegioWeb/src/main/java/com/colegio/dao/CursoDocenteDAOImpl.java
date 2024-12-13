@@ -13,23 +13,21 @@ import java.util.List;
 
 public class CursoDocenteDAOImpl implements CursoDocenteDAO, Serializable {
 
-    private static final long serialVersionUID = 1L;  
+    private static final long serialVersionUID = 1L;
     private CursoDAO cursoDAO = new CursoDAOImpl();
     private DocenteDAO docenteDAO = new DocenteDAOImpl();
     private GradoDAO gradoDAO = new GradoDAOImpl();
 
     @Override
-    public void insertar(CursoDocente cursoDocente){
+    public void insertar(CursoDocente cursoDocente) {
         String sql = "INSERT INTO Curso_Docente (id_curso, id_docente, id_grado) VALUES (?, ?, ?)";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setInt(1, cursoDocente.getCurso().getIdCurso());
             pstmt.setInt(2, cursoDocente.getDocente().getIdDocente());
             pstmt.setInt(3, cursoDocente.getGrado().getIdGrado());
             pstmt.executeUpdate();
 
-            
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     cursoDocente.setIdCursoDocente(generatedKeys.getInt(1));
@@ -38,16 +36,19 @@ public class CursoDocenteDAOImpl implements CursoDocenteDAO, Serializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public List<CursoDocente> listarTodos() {
         List<CursoDocente> cursoDocenteList = new ArrayList<>();
-        String sql = "SELECT id, id_curso, id_docente, id_grado FROM Curso_Docente";
-        try (Connection conn = ConexionBD.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        String sql = "SELECT cd.id, cd.id_curso, cd.id_docente, cd.id_grado "
+                + "FROM Curso_Docente cd "
+                + "JOIN Docentes d ON cd.id_docente = d.id_docente "
+                + "WHERE d.estado = 'Activo'";  // Solo seleccionamos docentes activos
+
+        try (Connection conn = ConexionBD.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 CursoDocente cursoDocente = new CursoDocente();
@@ -72,8 +73,7 @@ public class CursoDocenteDAOImpl implements CursoDocenteDAO, Serializable {
     @Override
     public CursoDocente obtenerPorId(int id) {
         String sql = "SELECT id, id_curso, id_docente, id_grado FROM Curso_Docente WHERE id = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -101,8 +101,7 @@ public class CursoDocenteDAOImpl implements CursoDocenteDAO, Serializable {
     @Override
     public void actualizar(CursoDocente cursoDocente) {
         String sql = "UPDATE Curso_Docente SET id_curso = ?, id_docente = ?, id_grado = ? WHERE id = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, cursoDocente.getCurso().getIdCurso());
             pstmt.setInt(2, cursoDocente.getDocente().getIdDocente());
@@ -112,14 +111,14 @@ public class CursoDocenteDAOImpl implements CursoDocenteDAO, Serializable {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void eliminar(int id) {
         String sql = "DELETE FROM Curso_Docente WHERE id = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {

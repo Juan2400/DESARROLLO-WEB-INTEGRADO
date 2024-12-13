@@ -19,38 +19,38 @@ public class CursoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private CursoDAO cursoDAO;  // Instancia manual del DAO
-    private EspecialidadDAO especialidadDAO;  // Instancia manual del DAO
+    private CursoDAO cursoDAO;  
+    private EspecialidadDAO especialidadDAO;
     
     private List<Curso> cursos;
-    private Curso selectedCurso = new Curso();  // Curso seleccionado para edición o creación
+    private Curso selectedCurso = new Curso();  
 
     @PostConstruct
     public void init() {
-        // Instanciamos los DAOs manualmente
+
         cursoDAO = new CursoDAOImpl();
         especialidadDAO = new EspecialidadDAOImpl();
         
-        loadCursos();  // Cargar la lista de cursos al inicio
+        loadCursos(); 
     }
 
     private void loadCursos() {
-        cursos = cursoDAO.listarTodos();  // Obtener todos los cursos desde el DAO
+        cursos = cursoDAO.listarTodos();  
     }
 
     public void prepareNewCurso() {
-        this.selectedCurso = new Curso();  // Preparar un nuevo curso para creación
+        this.selectedCurso = new Curso();
     }
 
     public void saveCurso() {
         try {
             if (selectedCurso.getIdCurso() == 0) {
-                cursoDAO.insertar(selectedCurso);  // Insertar un nuevo curso
-                cursos.add(this.selectedCurso);  // Agregar el curso a la lista
+                cursoDAO.insertar(selectedCurso); 
+                loadCursos();  
                 showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Curso registrado correctamente");
             } else {
-                cursoDAO.actualizar(selectedCurso);  // Actualizar los datos del curso existente
-                loadCursos();  // Recargar la lista de cursos
+                cursoDAO.actualizar(selectedCurso);  
+                loadCursos();  
                 showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Curso actualizado correctamente");
             }
         } catch (Exception e) {
@@ -61,8 +61,8 @@ public class CursoBean implements Serializable {
 
     public void deleteCurso(Curso curso) {
         try {
-            cursoDAO.eliminar(curso.getIdCurso());  // Eliminar el curso
-            cursos.remove(curso);  // Eliminar el curso de la lista
+            cursoDAO.eliminar(curso.getIdCurso());
+            cursos.remove(curso);
             showMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Curso eliminado correctamente");
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,7 +74,6 @@ public class CursoBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    // Métodos Getter y Setter
     public List<Curso> getCursos() {
         return cursos;
     }

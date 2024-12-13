@@ -1,0 +1,159 @@
+curl -X PUT \
+  http://localhost:8080/ColegioWeb/api/matriculas/4 \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "alumno": {
+        "apellido": "López Fernández",
+        "apoderado": {
+            "apellido": "Pérez Sánchez",
+            "direccion": "Calle Sol 789",
+            "dni": "34567890",
+            "email": "luis.perez@email.com",
+            "idResponsable": 3,
+            "nombre": "Luis",
+            "sexo": "M",
+            "telefono": "905551003"
+        },
+        "codigoEstudiante": "A12345678901",
+        "direccion": "Calle Principal 101",
+        "dni": "23456789",
+        "estadoEstudiante": {
+            "descripcion": "Alumno que ha terminado sus estudios de primaria",
+            "idEstadoEstudiante": 1,
+            "nombre": "INGRESANTE"
+        },
+        "grado": {
+            "descripcionGrado": "Primer grado de secundaria",
+            "idGrado": 1,
+            "nombreGrado": "Primero de Secundaria"
+        },
+        "idAlumno": 1,
+        "madre": {
+            "apellido": "López Fernández",
+            "direccion": "Avenida Real 456",
+            "dni": "23456789",
+            "email": "ana.lopez@email.com",
+            "idResponsable": 2,
+            "nombre": "Ana",
+            "sexo": "F",
+            "telefono": "905551002"
+        },
+        "nombre": "Juan",
+        "padre": {
+            "apellido": "García Martínez",
+            "direccion": "Calle Ficticia 123",
+            "dni": "12345678",
+            "email": "carlos.garcia@email.com",
+            "idResponsable": 1,
+            "nombre": "Carlos",
+            "sexo": "M",
+            "telefono": "905551001"
+        },
+        "sexo": "M",
+        "telefonoReferencia": "555-2001"
+    },
+    "anio": 2024,
+    "fechaRegistro": "2024-11-25T00:00:00",
+    "grado": {
+        "descripcionGrado": "Primer grado de secundaria",
+        "idGrado": 1,
+        "nombreGrado": "Primero de Secundaria"
+    },
+    "idMatricula": 4,
+    "observaciones": "Modificado con API REST"
+}'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+curl -X POST \
+  http://localhost:8080/ColegioWeb/api/matriculas \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "alumno": {
+        "apellido": "Martínez Jiménez",
+        "apoderado": {
+            "apellido": "Sánchez Pérez",
+            "direccion": "Avenida de la Paz 707",
+            "dni": "01234567",
+            "email": "patricia.sanchez@email.com",
+            "idResponsable": 10,
+            "nombre": "Patricia",
+            "sexo": "F",
+            "telefono": "905551010"
+        },
+        "codigoEstudiante": "A45678901234",
+        "direccion": "Calle Río 607",
+        "dni": "56789012",
+        "estadoEstudiante": {
+            "descripcion": "El alumno viene de otro colegio",
+            "idEstadoEstudiante": 2,
+            "nombre": "TRASLADADO"
+        },
+        "grado": {
+            "descripcionGrado": "Cuarto grado de secundaria",
+            "idGrado": 4,
+            "nombreGrado": "Cuarto de Secundaria"
+        },
+        "idAlumno": 4,
+        "madre": {
+            "apellido": "Jiménez Morales",
+            "direccion": "Calle Mar 606",
+            "dni": "90123456",
+            "email": "miguel.jimenez@email.com",
+            "idResponsable": 9,
+            "nombre": "Miguel",
+            "sexo": "M",
+            "telefono": "905551009"
+        },
+        "nombre": "Mariana",
+        "padre": {
+            "apellido": "Fernández Díaz",
+            "direccion": "Calle Verde 505",
+            "dni": "89012345",
+            "email": "carmen.fernandez@email.com",
+            "idResponsable": 8,
+            "nombre": "Carmen",
+            "sexo": "F",
+            "telefono": "905551008"
+        },
+        "sexo": "F",
+        "telefonoReferencia": "555-2004"
+    },
+    "anio": 2024,
+    "fechaRegistro": "2024-11-26T00:00:00",
+    "grado": {
+        "descripcionGrado": "Cuarto grado de secundaria",
+        "idGrado": 4,
+        "nombreGrado": "Cuarto de Secundaria"
+    },
+    "observaciones": "Guardado con API REST"
+}'

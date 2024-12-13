@@ -28,12 +28,9 @@ public class CursoDocenteBean implements Serializable {
     private CursoDocenteDAO cursoDocenteDAO;
     private List<CursoDocente> cursoDocentes;
     private CursoDocente selectedCursoDocente = new CursoDocente();
-
-    // Inyecta o inicializa los DAOs necesarios
     private DocenteDAO docenteDAO;
     private CursoDAO cursoDAO;
 
-    // Lista de docentes filtrados
     private List<Docente> docentesFiltrados;
 
     @PostConstruct
@@ -52,7 +49,6 @@ public class CursoDocenteBean implements Serializable {
         this.selectedCursoDocente = new CursoDocente();
     }
 
-    // Método para filtrar docentes al seleccionar un curso
     public void onCursoSelect() {
         if (this.selectedCursoDocente != null
                 && this.selectedCursoDocente.getCurso() != null) {
@@ -64,13 +60,11 @@ public class CursoDocenteBean implements Serializable {
             if (cursoCompleto != null
                     && cursoCompleto.getEspecialidad() != null) {
 
-                // Filtrar docentes de la misma especialidad y estado Activo
                 this.docentesFiltrados = docenteDAO.listarDocentesPorEspecialidadYEstado(
                         cursoCompleto.getEspecialidad().getIdEspecialidad(),
-                        "Activo" // Coincide con el ENUM de la tabla
+                        "Activo" 
                 );
 
-                // Verificar si hay docentes disponibles
                 if (this.docentesFiltrados.isEmpty()) {
                     FacesContext.getCurrentInstance().addMessage(null,
                             new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia",
@@ -120,11 +114,10 @@ public class CursoDocenteBean implements Serializable {
         }
     }
 
-    // Getter para la lista de docentes filtrados
     public List<Docente> getDocentesFiltrados() {
         return docentesFiltrados != null ? docentesFiltrados : new ArrayList<>();
     }
-    
+
     public List<CursoDocente> getCursoDocentes() {
         return cursoDocentes;
     }

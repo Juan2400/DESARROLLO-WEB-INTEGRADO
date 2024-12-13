@@ -11,8 +11,7 @@ public class AlumnoDAOImpl implements AlumnoDAO {
     @Override
     public void insertar(Alumno alumno) {
         String sql = "INSERT INTO Alumnos (codigo_estudiante, dni, nombre, apellido, direccion, sexo, telefono_referencia, id_padre, id_madre, id_apoderado, id_estado_estudiante, id_grado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, alumno.getCodigoEstudiante());
             pstmt.setString(2, alumno.getDni());
@@ -43,8 +42,7 @@ public class AlumnoDAOImpl implements AlumnoDAO {
     @Override
     public Alumno obtenerPorId(int idAlumno) {
         String sql = "SELECT * FROM Alumnos WHERE id_alumno = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idAlumno);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -59,7 +57,6 @@ public class AlumnoDAOImpl implements AlumnoDAO {
                     alumno.setSexo(rs.getString("sexo"));
                     alumno.setTelefonoReferencia(rs.getString("telefono_referencia"));
 
-                    // Relación con otras clases
                     ResponsableDAO responsableDAO = new ResponsableDAOImpl();
                     alumno.setPadre(responsableDAO.obtenerPorId(rs.getInt("id_padre")));
                     alumno.setMadre(responsableDAO.obtenerPorId(rs.getInt("id_madre")));
@@ -84,9 +81,7 @@ public class AlumnoDAOImpl implements AlumnoDAO {
     public List<Alumno> listarTodos() {
         List<Alumno> alumnos = new ArrayList<>();
         String sql = "SELECT * FROM Alumnos";
-        try (Connection conn = ConexionBD.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Alumno alumno = new Alumno();
@@ -99,7 +94,6 @@ public class AlumnoDAOImpl implements AlumnoDAO {
                 alumno.setSexo(rs.getString("sexo"));
                 alumno.setTelefonoReferencia(rs.getString("telefono_referencia"));
 
-                // Relación con otras clases
                 ResponsableDAO responsableDAO = new ResponsableDAOImpl();
                 alumno.setPadre(responsableDAO.obtenerPorId(rs.getInt("id_padre")));
                 alumno.setMadre(responsableDAO.obtenerPorId(rs.getInt("id_madre")));
@@ -119,11 +113,11 @@ public class AlumnoDAOImpl implements AlumnoDAO {
         return alumnos;
     }
 
+    
     @Override
     public void actualizar(Alumno alumno) {
         String sql = "UPDATE Alumnos SET codigo_estudiante = ?, dni = ?, nombre = ?, apellido = ?, direccion = ?, sexo = ?, telefono_referencia = ?, id_padre = ?, id_madre = ?, id_apoderado = ?, id_estado_estudiante = ?, id_grado = ? WHERE id_alumno = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, alumno.getCodigoEstudiante());
             pstmt.setString(2, alumno.getDni());
@@ -142,15 +136,14 @@ public class AlumnoDAOImpl implements AlumnoDAO {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);  
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void eliminar(int idAlumno) {
         String sql = "DELETE FROM Alumnos WHERE id_alumno = ?";
-        try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idAlumno);
             pstmt.executeUpdate();

@@ -24,13 +24,21 @@ public class AlumnoBean implements Serializable {
 
     private List<Alumno> alumnos;
     private Alumno selectedAlumno = new Alumno();
-    private AlumnoDAO alumnoDAO = new AlumnoDAOImpl();
-    private ResponsableDAO  responsableDAO = new ResponsableDAOImpl();
-    private GradoDAO gradoDAO = new GradoDAOImpl();
-    private EstadoEstudianteDAO estadoEstudianteDAO = new EstadoEstudianteDAOImpl();
+    private AlumnoDAO alumnoDAO;
+    private ResponsableDAO responsableDAO;
+    private GradoDAO gradoDAO;
+    private EstadoEstudianteDAO estadoEstudianteDAO;
 
     @PostConstruct
     public void init() {
+        alumnoDAO = new AlumnoDAOImpl();
+        responsableDAO = new ResponsableDAOImpl();
+        gradoDAO = new GradoDAOImpl();
+        estadoEstudianteDAO = new EstadoEstudianteDAOImpl();
+        loadAlumnos();
+    }
+
+    private void loadAlumnos() {
         alumnos = alumnoDAO.listarTodos();
     }
 
@@ -42,9 +50,10 @@ public class AlumnoBean implements Serializable {
         try {
             if (this.selectedAlumno.getIdAlumno() == 0) {
                 alumnoDAO.insertar(this.selectedAlumno);
-                alumnos.add(this.selectedAlumno);
+                loadAlumnos();
             } else {
                 alumnoDAO.actualizar(this.selectedAlumno);
+                loadAlumnos();
             }
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(
